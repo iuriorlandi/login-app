@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import API_URL from './config'
+import validation from './registerValidation';
+import authAPI from './authAPI';
 
 function RegisterForm(){
     const [formData, setFormData] = useState({
@@ -9,7 +9,11 @@ function RegisterForm(){
         email: ''
     });
 
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState({
+        username: '',
+        password: '',
+        email: ''
+    });
 
     const handleInputChange = (e) => {
         const{name, value} = e.target;
@@ -27,44 +31,12 @@ function RegisterForm(){
         });
     };
 
-    const validateUsername = (username) => {
-        const fieldName = 'Username'
-        return validateRequired(username, fieldName)
-            || validateMinLength(username, 6, fieldName) 
-            || validateMaxLength(username, 50, fieldName)
-    };
-
-    const validatePassword = (password) => {
-        const fieldName = 'Password'
-        return validateRequired(password, fieldName)
-            || validateMinLength(password, 6, fieldName) 
-            || validateMaxLength(password, 50, fieldName)
-    };
-
-    const validateEmail = (email) => {
-        const fieldName = 'E-mail'
-        return validateRequired(email, fieldName)
-            || validateMaxLength(email, 200, fieldName)
-    };
-
-    const validateRequired = (value, fieldName) => {
-            return value ? '' : `${fieldName} is required.`
-    };
-
-    const validateMinLength = (value, minLength, fieldName) => {
-        return value.length >= minLength ? '' : `${fieldName} minimum length is ${minLength} characters.`;
-      };
-      
-    const validateMaxLength = (value, maxLength, fieldName) => {
-        return value.length <= maxLength ? '' : `${fieldName} maximum length is ${maxLength} characters.`;
-      };
-
     const handleSubmit = async(e) => {
         e.preventDefault();
         
-        const usernameError = validateUsername(formData.username);
-        const passwordError = validatePassword(formData.password);
-        const emailError = validateEmail(formData.email);
+        const usernameError = validation.validateUsername(formData.username);
+        const passwordError = validation.validatePassword(formData.password);
+        const emailError = validation.validateEmail(formData.email);
         
         if(usernameError ||  passwordError || emailError){
             setErrors({
@@ -74,22 +46,9 @@ function RegisterForm(){
             });
             return;
         }
-
-        try {
-
-            const api = axios.create({
-                baseURL: API_URL
-            });
-
-            const response = await api.post('User/register', formData);
-      
-            if (response.status === 200) {
-              alert('Registration successful. You can now log in.');
-            }
-          } catch (error) {
-            console.error('Error during registration:', error.message);
-            alert('An error occurred during registration. Please check your network connection and try again.');
-          }
+        
+        authAPI.register(formData)
+        
     };
 
     return (
