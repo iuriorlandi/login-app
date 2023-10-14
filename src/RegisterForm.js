@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import validation from './registerValidation';
+import validation from './userValidation';
 import authAPI from './authAPI';
+import { Link } from 'react-router-dom';
 
 function RegisterForm(){
     const [formData, setFormData] = useState({
@@ -47,8 +48,7 @@ function RegisterForm(){
             return;
         }
         
-        authAPI.register(formData)
-        
+        authAPI.register(formData);
     };
 
     return (
@@ -90,6 +90,7 @@ function RegisterForm(){
                         <div className='error'>{errors.email}</div>
                     </div>
                     <button type='submit'>Register</button>
+                    <Link to={'/'}>Login</Link>
                 </form>
             </div>
         </div>

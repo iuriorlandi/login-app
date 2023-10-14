@@ -1,5 +1,6 @@
 import API_URL from './config';
 import axios from 'axios';
+import cookies from 'js-cookies';
 
 const register = async (formData) =>{
     try {
@@ -25,6 +26,33 @@ const register = async (formData) =>{
     }
 }
 
+const login = async (formData) =>{
+    try{
+        const api = axios.create({
+            baseURL: API_URL
+        });
+
+        const response = await api.post('Auth/login', formData);
+    
+        const token = response.data.data.token;
+        cookies.setItem('auth-token', token);
+
+        if (response.status === 200) {
+            alert('Login successful.');
+        }
+    }
+    catch (error) {
+        if(error.response.status === 500){
+            console.error('Error during login:', error.message);
+            alert('An error occurred during login. Please check your network connection and try again.');
+        }
+        else{
+            console.error('Error during login:', error.message);
+            alert(`An error occurred during login. ${extractErrorMessage(error.response.data)}`);
+        }
+    }
+};
+
 const extractErrorMessage = (errorData) =>{
     if(errorData.hasOwnProperty('message'))
         return errorData.message;
@@ -43,6 +71,6 @@ const extractErrorMessage = (errorData) =>{
     return '';
 }
 
-const authAPI = { register };
+const authAPI = { register, login };
 
 export default authAPI;
