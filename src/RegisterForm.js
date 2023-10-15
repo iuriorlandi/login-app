@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import validation from './userValidation';
 import authAPI from './authAPI';
 import { Link } from 'react-router-dom';
+import './baseStyles.css'
+import { ToastContainer } from 'react-toastify';
 
 function RegisterForm(){
     const [formData, setFormData] = useState({
@@ -52,46 +54,51 @@ function RegisterForm(){
     };
 
     return (
-        <div>
-            <h2>User Registration</h2>
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label htmlFor='username'>Username</label>
-                        <input
-                            type='text' 
-                            id='username' 
-                            name='username'
-                            value={formData.username}
-                            onFocus={cleanError}
-                            onChange={handleInputChange}/>
-                        <div className='error'>{errors.username}</div>
-                    </div>
-                    <div>
-                        <label htmlFor='password'>Password</label>
-                        <input
-                            type='password'
-                            id='password' 
-                            name='password'
-                            value={formData.password}
-                            onFocus={cleanError}
-                            onChange={handleInputChange}/>
-                        <div className='error'>{errors.password}</div>
-                    </div>
-                    <div>
-                        <label htmlFor='email'>E-mail</label>
-                        <input
-                            type='email'
-                            id='email' 
-                            name='email'
-                            value={formData.email}
-                            onFocus={cleanError}
-                            onChange={handleInputChange}/>
-                        <div className='error'>{errors.email}</div>
-                    </div>
-                    <button type='submit'>Register</button>
-                    <Link to={'/'}>Login</Link>
-                </form>
+        <div className='main-container'>
+            <div className='content-card'>
+                <h2>User Registration</h2>
+                <div>
+                    <form onSubmit={handleSubmit}>
+                        <div className='form-group'>
+                            <label htmlFor='username'>Username</label>
+                            <input
+                                type='text' 
+                                id='username' 
+                                name='username'
+                                value={formData.username}
+                                onFocus={cleanError}
+                                onChange={handleInputChange}/>
+                            <div className='error'>{errors.username}</div>
+                        </div>
+                        <div className='form-group'>
+                            <label htmlFor='password'>Password</label>
+                            <input
+                                type='password'
+                                id='password' 
+                                name='password'
+                                value={formData.password}
+                                onFocus={cleanError}
+                                onChange={handleInputChange}/>
+                            <div className='error'>{errors.password}</div>
+                        </div>
+                        <div className='form-group'>
+                            <label htmlFor='email'>E-mail</label>
+                            <input
+                                type='email'
+                                id='email' 
+                                name='email'
+                                value={formData.email}
+                                onFocus={cleanError}
+                                onChange={handleInputChange}/>
+                            <div className='error'>{errors.email}</div>
+                        </div>
+                        <div className='button-container'>
+                            <button type='submit'>Register</button>
+                            <Link to={'/'} className='link-button'>Sign In</Link>
+                            <ToastContainer/>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );

@@ -1,27 +1,29 @@
 import API_URL from './config';
 import axios from 'axios';
 import cookies from 'js-cookies';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const register = async (formData) =>{
     try {
         const api = axios.create({
             baseURL: API_URL
-        });
+            });
 
         const response = await api.post('User/register', formData);
     
         if (response.status === 200) {
-            alert('Registration successful. You can now log in.');
+            toast.success('Registration successful. You can now log in.', {position: 'top-center'});
         }
     } 
     catch (error) {
-        if(error.response.status === 500){
+        if(!error.response || error.response.status === 500){
             console.error('Error during registration:', error.message);
-            alert('An error occurred during registration. Please check your network connection and try again.');
+            toast.error('An error occurred during registration. Please check your network connection and try again.', {position: 'top-center'});
         }
         else{
             console.error('Error during registration:', error.message);
-            alert(`An error occurred during registration. ${extractErrorMessage(error.response.data)}`);
+            toast.error(`An error occurred during registration. ${extractErrorMessage(error.response.data)}`, {position: 'top-center'});
         }
     }
 }
@@ -38,17 +40,17 @@ const login = async (formData) =>{
         cookies.setItem('auth-token', token);
 
         if (response.status === 200) {
-            alert('Login successful.');
+            toast.success('Login successful.', {position: 'top-center'});
         }
     }
     catch (error) {
-        if(error.response.status === 500){
+        if(!error.response || error.response.status === 500){
             console.error('Error during login:', error.message);
-            alert('An error occurred during login. Please check your network connection and try again.');
+            toast.error('An error occurred during login. Please check your network connection and try again.', {position: 'top-center'});
         }
         else{
             console.error('Error during login:', error.message);
-            alert(`An error occurred during login. ${extractErrorMessage(error.response.data)}`);
+            toast.error(`An error occurred during login. ${extractErrorMessage(error.response.data)}`, {position: 'top-center'});
         }
     }
 };
